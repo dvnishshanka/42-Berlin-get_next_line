@@ -6,7 +6,7 @@
 /*   By: dnishsha <dnishsha@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:22:16 by dnishsha          #+#    #+#             */
-/*   Updated: 2023/05/17 15:27:38 by dnishsha         ###   ########.fr       */
+/*   Updated: 2023/05/18 16:54:16 by dnishsha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,25 @@ Return: Read line: correct behavior
 
 #include "get_next_line.h"
 
+#include <stdio.h>
+
 char	*get_next_line(int fd)
 {
+  char * buf;
+
+  buf = (char *)malloc(BUFFER_SIZE);
 	if (fd < 0)
 		return (0);
+  read(fd, buf, BUFFER_SIZE);
+  printf("%s\n", buf);
 	return (0);
 }
 
 #include <stdio.h>
+ #include <fcntl.h>
 int	main(void)
 {
+  get_next_line(open("test.txt", O_RDONLY));
 
 	return (0);
 }

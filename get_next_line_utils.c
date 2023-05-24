@@ -6,7 +6,7 @@
 /*   By: dnishsha <dnishsha@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:24:10 by dnishsha          #+#    #+#             */
-/*   Updated: 2023/05/23 12:57:05 by dnishsha         ###   ########.fr       */
+/*   Updated: 2023/05/23 23:07:54 by dnishsha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static size_t	str_length(char *str)
 	return (len);
 }
 
-// Concatenate two strings and return new string
+// Concatenate two strings and return new string.
 char	*str_join(char *s1, char *s2)
 {
 	char	*dst;
@@ -77,12 +77,12 @@ int	find_index(char *str, char c)
 	{
 		if (str[index] == c)
 			return (index);
-		str ++;
+		index ++;
 	}
 	return (-1);
 }
 
-// Create a substr
+// Create a substring.
 char	*substr(char *s1, size_t len)
 {
 	char	*dst;

@@ -6,7 +6,7 @@
 /*   By: dnishsha <dnishsha@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:22:31 by dnishsha          #+#    #+#             */
-/*   Updated: 2023/05/23 13:20:24 by dnishsha         ###   ########.fr       */
+/*   Updated: 2023/05/24 14:44:18 by dnishsha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 
+# include <stdio.h>
+
 char	*get_next_line(int fd);
 
 // Supporting functions
@@ -27,4 +29,5 @@ void	clean_buf(char *buf);
 int		find_index(char *str, char c);
 char	*str_join(char *s1, char *s2);
 char	*substr(char *s1, size_t len);
+size_t	str_length(char *str);
 #endif

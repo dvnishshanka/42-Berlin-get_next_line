@@ -6,7 +6,7 @@
 /*   By: dnishsha <dnishsha@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:24:10 by dnishsha          #+#    #+#             */
-/*   Updated: 2023/05/23 23:07:54 by dnishsha         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:41:57 by dnishsha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	clean_buf(char *buf)
 }
 
 //Calculate string length
-static size_t	str_length(char *str)
+size_t	str_length(char *str)
 {
 	size_t	len;
 
@@ -48,15 +48,17 @@ char	*str_join(char *s1, char *s2)
 	size_t	i;
 
 	i = 0;
-	if (!s1 || !s2)
+	if (!s2)
 		return (0);
 	dst = (char *)malloc((str_length(s1) + str_length(s2) + 1) * sizeof(char));
-	while (*s1)
+	if (!dst)
+		return (0);
+	while (s1 && *s1)
 	{
 		dst[i++] = *s1;
 		s1 ++;
 	}
-	while (*s2)
+	while (s2 && *s2)
 	{
 		dst[i++] = *s2;
 		s2 ++;
@@ -92,6 +94,8 @@ char	*substr(char *s1, size_t len)
 	if (!s1)
 		return (0);
 	dst = (char *)malloc((len + 1) * sizeof(char));
+	if (!dst)
+		return (0);
 	while (i < len)
 	{
 		dst[i] = s1[i];

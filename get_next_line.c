@@ -6,7 +6,7 @@
 /*   By: dnishsha <dnishsha@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:22:16 by dnishsha          #+#    #+#             */
-/*   Updated: 2023/05/24 16:13:02 by dnishsha         ###   ########.fr       */
+/*   Updated: 2023/05/25 23:11:16 by dnishsha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,22 @@ Return: Read line: correct behavior
 
 #include "get_next_line.h"
 
-#include <stdio.h>
-
+// Read from the file to the buffer
 static char	*fd_read(int fd, char *left_str)
 {
 	int		bytes_rd;
 	char	*buf;
 
-	bytes_rd = 1;
+	bytes_rd = BUFFER_SIZE;
 	buf = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buf)
 		return (0);
-	while (bytes_rd > 0 && find_index(buf, '\n') == -1)
+	while (bytes_rd == BUFFER_SIZE && find_index(buf, '\n') == -1)
 	{
 		bytes_rd = read(fd, buf, BUFFER_SIZE);
 		if (bytes_rd < 0)
 		{
 			free (buf);
-			free(left_str);
 			return (0);
 		}
 		buf[bytes_rd] = '\0';
@@ -48,40 +46,83 @@ static char	*fd_read(int fd, char *left_str)
 	return (left_str);
 }
 
+static char *get_line(char *left_str)
+{
+  char *line;
+  int pos;
+  int i;
+
+  pos = find_index(left_str, '\n');
+  i = 0;
+  if (pos != -1)
+    line = (char *)malloc(sizeof(char) * (pos + 2));
+  else
+    line = (char *)malloc(sizeof(char) * (str_length(left_str) + 1));
+  if (!line)
+    return (0);
+  while (left_str[i] && left_str[i] != '\n')
+  {
+    line[i] = left_str[i];
+    i ++;
+  }
+  if (left_str[i] != '\n')
+  {
+    line[i] = left_str[i];
+    i ++;
+  }
+  line[i] = '\0';
+  return (line);
+}
+
+static char  *get_residual_str(char *left_str)
+{
+  char *residual_str;
+  int pos;
+  int i;
+
+  pos = find_index(left_str, '\n');
+  i = 0;
+  if (pos != -1)
+    residual_str = (char *)malloc(sizeof(char) * (str_length(left_str) - pos));
+  else
+    residual_str = (char *)malloc(sizeof(char) * 1);
+  if (!residual_str)
+    return (0);
+  while (pos != -1 && left_str[pos + 1 + i])
+  {
+    residual_str[i] = left_str[pos + 1 + i];
+    i ++;
+  }
+  residual_str[i] = '\0';
+  free(left_str);
+  return (residual_str);
+}
+
 char	*get_next_line(int fd)
 {
 	static char	*left_str;
 	char		*line;
-	int			pos;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
-	pos = find_index(left_str, '\n');
-	line = 0;
-	if (pos != -1)
-	{
-		line = substr(left_str, pos + 1);
-		left_str = substr(&left_str[pos +1], str_length(left_str) - pos);
-		return (line);
-	}
-	left_str = fd_read(fd, left_str);
-	if (str_length(left_str) == 0)
-	{
-		free(left_str);
-		free(line);
-		return (0);
-	}
-	pos = find_index(left_str, '\n');
-	if (pos != -1)
-	{
-		line = substr(left_str, pos + 1);
-		left_str = substr(&left_str[pos +1], str_length(left_str) - pos);
-	}
+  left_str = fd_read(fd, left_str);
+  if (!left_str || str_length(left_str) == 0)
+  {
+    free(left_str);
+    return (0);
+  }
+  line = get_line(left_str);
+  if (!line || str_length(line) == 0)
+  {
+    free(left_str);
+    return (0);
+  }
+  left_str = get_residual_str(left_str);
 	return (line);
 }
 
 
-// #include <stdio.h>
+
 // #include <fcntl.h>
 
 // int	main(void)
@@ -95,7 +136,7 @@ char	*get_next_line(int fd)
 // 	while (i < 4)
 // 	{
 // 		line = get_next_line(fd);
-// 		printf("Line %d: %s", i + 1, line);
+// 		printf("Line %d: -%s-", i + 1, line);
 // 		free(line);
 // 		i ++;
 // 	}

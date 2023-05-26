@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dnishsha <dnishsha@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/17 14:22:16 by dnishsha          #+#    #+#             */
-/*   Updated: 2023/05/26 15:06:39 by dnishsha         ###   ########.fr       */
+/*   Updated: 2023/05/26 15:06:55 by dnishsha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Return: Read line: correct behavior
 		NULL: there is nothing else to read, or an error occurred
 */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 // Read from the file to the buffer and join them to a string until a
 // new line or end of file occur in the buffer.
@@ -105,23 +105,23 @@ static char	*get_residual_str(char *left_str)
 
 char	*get_next_line(int fd)
 {
-	static char	*left_str;
+	static char	*left_str[1000] = {NULL};
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
-	left_str = fd_read(fd, left_str);
-	if (!left_str)
+	left_str[fd] = fd_read(fd, left_str[fd]);
+	if (!left_str[fd])
 		return (0);
-	line = get_line(left_str);
+	line = get_line(left_str[fd]);
 	if (!line || str_length(line) == 0)
 	{
-		free(left_str);
+		free(left_str[fd]);
 		free(line);
-		left_str = NULL;
+		left_str[fd] = NULL;
 		return (NULL);
 	}
-	left_str = get_residual_str(left_str);
+	left_str[fd] = get_residual_str(left_str[fd]);
 	return (line);
 }
 
@@ -129,24 +129,35 @@ char	*get_next_line(int fd)
 /*
 #include <fcntl.h>
 #include <stdio.h>
+
 int	main(void)
 {
-	int		fd;
-	char	*line;
+	int		fd1;
+	int		fd2;
+	char	*line[2];
 	int		i;
 
-	i = 0;
-	fd = open("test.txt", O_RDONLY);
-	line = get_next_line(fd);
-	printf("Line : %s ", line);
-	free(line);
-	line = get_next_line(fd);
-	printf("Line : %s ", line);
-	free(line);
-	line = get_next_line(fd);
-	printf("Line : %s ", line);
-	free(line);
-	close(fd);
+	fd1 = open("test.txt", O_RDONLY);
+	fd2 = open("test2.txt", O_RDONLY);
+	line[0] = get_next_line(fd1);
+	printf("Line : %s", line[0]);
+	free(line[0]);
+	line[1] = get_next_line(fd2);
+	printf("Line : %s", line[1]);
+	free(line[1]);
+	line[0] = get_next_line(fd1);
+	printf("Line : %s", line[0]);
+	free(line[0]);
+	line[1] = get_next_line(fd2);
+	printf("Line : %s", line[1]);
+	free(line[1]);
+	line[0] = get_next_line(fd1);
+	printf("Line : %s", line[0]);
+	free(line[0]);
+	line[1] = get_next_line(fd2);
+	printf("Line : %s", line[1]);
+	free(line[1]);
+	close(fd1);
+	close(fd2);
 	return (0);
-}
-*/
+}*/

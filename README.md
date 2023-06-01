@@ -1,6 +1,6 @@
 # get_next_line
 
-The ft_printf is a re-implementation of printf() function from libc.
+Function 'get_next_line' returns a line read from a file descriptor.
 
 **Languages**
 

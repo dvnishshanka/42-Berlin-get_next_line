@@ -12,7 +12,7 @@ The ft_printf is a re-implementation of printf() function from libc.
 - Function should return the line that was read. If there is nothing else to read or if an error occurred, it should return NULL.
 - Make sure that your function works as expected both when reading a file and when reading from the standard input.
 
-**Result: :one::twoooo::zero: / :one::zero::zero: :heavy_check_mark:**
+**Result: :one::two::five: / :one::zero::zero: :heavy_check_mark:**
 
 Tested Using:
 https://github.com/xicodomingues/francinette
